@@ -1,0 +1,67 @@
+<League Id="1763" SeasonId="90" DivisionId="7229" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)"
+        SportId="4" SportName="Tag Rugby" SeasonName="Spring 2025" DivisionName="Pool A">
+  <Week Date="13/02/2025">
+    <Fixture DateTime="13/02/2025 20:00" Id="197475" FixtureName="Round 1" ResourceId="823" PlayingAreaName="Pitch A"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="9269" HomeTeam="Tagliatelle"
+             HomeTeamScore="3" HomeTeamForfeit="False" AwayTeamId="9808" AwayTeam="Tag Reflex" AwayTeamScore="23"
+             AwayTeamForfeit="False" Duration="45" Umpires="Gustav Peter Daniels Galle" UmpireIds="75147"
+             CrossLeague="False" DivisionName="Pool A" CalendarColour="66FFFF" ResourceOrder="1" FixtureTypeId="0"
+             UmpireTeamId="0" HasSoccerFeed="False" PhaseName=""/>
+    <Fixture DateTime="13/02/2025 20:00" Id="197476" FixtureName="Round 1" ResourceId="822" PlayingAreaName="Pitch B"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="11196" HomeTeam="Panic A Tags"
+             HomeTeamScore="5" HomeTeamForfeit="False" AwayTeamId="9273" AwayTeam="Wu-Tag  Clan" AwayTeamScore="10"
+             AwayTeamForfeit="False" Duration="45" Umpires="Naomi Lee" UmpireIds="28868" CrossLeague="False"
+             DivisionName="Pool A" CalendarColour="66FFFF" ResourceOrder="2" FixtureTypeId="0" UmpireTeamId="0"
+             HasSoccerFeed="False" PhaseName=""/>
+  </Week>
+  <Week Date="20/02/2025">
+    <Fixture DateTime="20/02/2025 19:15" Id="197478" FixtureName="Round 2" ResourceId="823" PlayingAreaName="Pitch A"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="9808" HomeTeam="Tag Reflex"
+             HomeTeamScore="10" HomeTeamForfeit="False" AwayTeamId="11196" AwayTeam="Panic A Tags" AwayTeamScore="0"
+             AwayTeamForfeit="False" Duration="45" Umpires="Naomi Lee" UmpireIds="28868" CrossLeague="False"
+             DivisionName="Pool A" CalendarColour="66FFFF" ResourceOrder="1" FixtureTypeId="0" UmpireTeamId="0"
+             HasSoccerFeed="False" PhaseName=""/>
+    <Fixture DateTime="20/02/2025 19:15" Id="197477" FixtureName="Round 2" ResourceId="822" PlayingAreaName="Pitch B"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="9269" HomeTeam="Tagliatelle"
+             HomeTeamScore="2" HomeTeamForfeit="False" AwayTeamId="9273" AwayTeam="Wu-Tag  Clan" AwayTeamScore="9"
+             AwayTeamForfeit="False" Duration="45" Umpires="Gustav Peter Daniels Galle" UmpireIds="75147"
+             CrossLeague="False" DivisionName="Pool A" CalendarColour="66FFFF" ResourceOrder="2" FixtureTypeId="0"
+             UmpireTeamId="0" HasSoccerFeed="False" PhaseName=""/>
+  </Week>
+  <Week Date="27/02/2025">
+    <Fixture DateTime="27/02/2025 18:30" Id="197480" FixtureName="Round 3" ResourceId="823" PlayingAreaName="Pitch A"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="9273" HomeTeam="Wu-Tag  Clan"
+             HomeTeamScore="" HomeTeamForfeit="False" AwayTeamId="9808" AwayTeam="Tag Reflex" AwayTeamScore=""
+             AwayTeamForfeit="False" Duration="45" Umpires="" UmpireIds="" CrossLeague="False" DivisionName="Pool A"
+             CalendarColour="66FFFF" ResourceOrder="1" FixtureTypeId="0" UmpireTeamId="0" HasSoccerFeed="False"
+             PhaseName=""/>
+    <Fixture DateTime="27/02/2025 18:30" Id="197479" FixtureName="Round 3" ResourceId="822" PlayingAreaName="Pitch B"
+             VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="9269" HomeTeam="Tagliatelle"
+             HomeTeamScore="" HomeTeamForfeit="False" AwayTeamId="11196" AwayTeam="Panic A Tags" AwayTeamScore=""
+             AwayTeamForfeit="False" Duration="45" Umpires="" UmpireIds="" CrossLeague="False" DivisionName="Pool A"
+             CalendarColour="66FFFF" ResourceOrder="2" FixtureTypeId="0" UmpireTeamId="0" HasSoccerFeed="False"
+             PhaseName=""/>
+  </Week>
+  <Week Date="10/04/2025">
+    <Fixture DateTime="10/04/2025 18:30" Id="198454" FixtureName="Spring Semi-Finals" ResourceId="823"
+             PlayingAreaName="Pitch A" VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="0" HomeTeam="" HomeTeamScore=""
+             HomeTeamForfeit="False" AwayTeamId="0" AwayTeam="" AwayTeamScore="" AwayTeamForfeit="False" Duration="45"
+             Umpires="" UmpireIds="" CrossLeague="False" DivisionName="" CalendarColour="66FFFF" ResourceOrder="1"
+             FixtureTypeId="0" UmpireTeamId="0" HasSoccerFeed="False" PhaseName=""/>
+  </Week>
+  <Week Date="17/04/2025">
+    <Fixture DateTime="17/04/2025 18:30" Id="198453" FixtureName="Spring Finals" ResourceId="823"
+             PlayingAreaName="Pitch A" VenueId="441" VenueName="Brighton - Cardinal Newman School"
+             MapLink="https://maps.app.goo.gl/3NvBgoQKu39ghF5N9" HomeTeamId="0" HomeTeam="" HomeTeamScore=""
+             HomeTeamForfeit="False" AwayTeamId="0" AwayTeam="" AwayTeamScore="" AwayTeamForfeit="False" Duration="45"
+             Umpires="" UmpireIds="" CrossLeague="False" DivisionName="" CalendarColour="66FFFF" ResourceOrder="1"
+             FixtureTypeId="0" UmpireTeamId="0" HasSoccerFeed="False" PhaseName=""/>
+  </Week>
+</League>
