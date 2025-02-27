@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.0'
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.0'
+//    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
 group = 'com.mduffin95'
@@ -26,6 +27,31 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.mnode.ical4j/ical4j
     implementation 'org.mnode.ical4j:ical4j:4.1.0'
+
+    implementation 'aws.sdk.kotlin:s3:1.4.30'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+//    implementation 'software.amazon.awssdk:s3:2.28.29'
+    implementation 'org.slf4j:slf4j-nop:2.0.16'
+
+//    implementation(platform(awssdk.bom))
+
+//    implementation(awssdk.services.s3)
+//    implementation(awssdk.services.dynamodb)
+//    implementation(awssdk.services.iam)
+//    implementation(awssdk.services.cloudwatch)
+//    implementation(awssdk.services.cognitoidentityprovider)
+//    implementation(awssdk.services.sns)
+//    implementation(awssdk.services.pinpoint)
+//    implementation("org.apache.logging.log4j:log4j-slf4j2-impl")
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from jar
+        from configurations.runtimeClasspath
+    }
 }
 
 test {
@@ -34,3 +60,5 @@ test {
 kotlin {
     jvmToolchain(21)
 }
+
+build.dependsOn buildZip
