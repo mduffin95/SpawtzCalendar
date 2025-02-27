@@ -30,7 +30,7 @@ class Handler: RequestHandler<Map<String, Any>, String> {
             .forEach {
                 val str = outputCalendar(it)
                 val byteStream = ByteStream.fromString(str)
-                runBlocking { putObject(bucketName, "${it.team.id}.ics", byteStream) }
+                runBlocking { putObject(bucketName, "calendar/v1/${it.team.id}.ics", byteStream) }
             }
 
         return "OK"
