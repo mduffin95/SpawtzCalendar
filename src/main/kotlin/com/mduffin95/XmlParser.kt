@@ -3,6 +3,7 @@ package com.mduffin95
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -14,10 +15,11 @@ import nl.adaptivity.xmlutil.serialization.UnknownChildHandler
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.XmlElement
 import nl.adaptivity.xmlutil.serialization.XmlSerialName
+import java.time.Duration
 
 @Serializable
 @XmlSerialName("League")
-data class League(
+private data class XmlLeague(
     @XmlSerialName("Id") val id: Int,
     @XmlSerialName("SeasonId") val seasonId: Int,
     @XmlSerialName("DivisionId") val divisionId: Int,
@@ -26,19 +28,32 @@ data class League(
     @XmlSerialName("SportName") val sportName: String,
     @XmlSerialName("SeasonName") val seasonName: String,
     @XmlSerialName("DivisionName") val divisionName: String?,
-    @XmlElement(true) val week: List<Week>
-)
+    @XmlElement(true) val week: List<XmlWeek>
+) {
+
+    fun toLeague(): League {
+        val fixtures = week.stream()
+            .flatMap { it.fixture.stream() }
+            .map { it.toFixture() }
+            .toList()
+        return League(
+            id,
+            leagueName,
+            fixtures
+        )
+    }
+}
 
 @Serializable
 @XmlSerialName("Week")
-data class Week(
+private data class XmlWeek(
     @XmlSerialName("Date") val date: String,
-    @XmlElement(true) val fixture: List<Fixture>
+    @XmlElement(true) val fixture: List<XmlFixture>
 )
 
 @Serializable
 @XmlSerialName("Fixture")
-data class Fixture(
+private data class XmlFixture(
     @XmlSerialName("DateTime") @Serializable(with = LocalDateTimeSerializer::class) val dateTime: LocalDateTime,
     @XmlSerialName("Id") val id: Int,
     @XmlSerialName("FixtureName") val fixtureName: String,
@@ -66,10 +81,20 @@ data class Fixture(
 //    @XmlSerialName("UmpireTeamId") val umpireTeamId: Int,
 //    @XmlSerialName("HasSoccerFeed") val hasSoccerFeed: Boolean,
 //    @XmlSerialName("PhaseName") val phaseName: String?
-)
+) {
+    fun toFixture(): Fixture {
+        return Fixture(
+            id,
+            Team(homeTeamId, homeTeam),
+            Team(awayTeamId, awayTeam),
+            dateTime.toJavaLocalDateTime(),
+            Duration.ofMinutes(duration.toLong())
+        )
+    }
+}
 
 
-object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
+private object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
     private const val PATTERN = "dd/MM/yyyy HH:mm"
 
@@ -96,7 +121,9 @@ class XmlParser {
         unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
     }
 
-    fun parse(input: String): League {
-        return xml.decodeFromString(League.serializer(), input)
+    fun parse(input: String): Store {
+        val xmlLeague = xml.decodeFromString(XmlLeague.serializer(), input)
+        val league = xmlLeague.toLeague()
+        return InMemoryStore.fromLeague(league)
     }
 }
