@@ -25,8 +25,12 @@ class Handler: RequestHandler<Map<String, Any>, String> {
 
         val bucketName = System.getenv("BUCKET_NAME")
 
-        val inputString = getInput()
-        parse(inputString)
+        val tuesdayLeague = XmlParser().parse(getInput(1756))
+        val thursdayLeague = XmlParser().parse(getInput(1763))
+        val store = InMemoryStore()
+            .add(tuesdayLeague)
+            .add(thursdayLeague)
+        createCalendarsForTeams(store)
             .forEach {
                 val str = outputCalendar(it)
                 val byteStream = ByteStream.fromString(str)
@@ -55,10 +59,8 @@ class Handler: RequestHandler<Map<String, Any>, String> {
     }
 }
 
-fun parse(input: String): List<TeamCalendar> {
-    val store = XmlParser().parse(input)
-
-    val teams = store.getTeams(1763)
+fun createCalendarsForTeams(store: Store): List<TeamCalendar> {
+    val teams = store.getTeams()
     val calendarList = mutableListOf<TeamCalendar>()
     for (team in teams) {
         val fixtures = store.getFixtures(team.id)
@@ -78,12 +80,13 @@ fun parse(input: String): List<TeamCalendar> {
     return calendarList
 }
 
-fun getInput(): String {
+fun getInput(leagueId: Int): String {
     val client = JavaHttpClient()
 
+    // Tuesday =
     val request = Request(Method.GET, "https://trytagrugby.spawtz.com/External/Fixtures/Feed.aspx")
         .query("Type", "Fixtures")
-        .query("LeagueId", "1763")
+        .query("LeagueId", leagueId.toString())
         .query("SeasonId", "90")
 
     val response = client(request)

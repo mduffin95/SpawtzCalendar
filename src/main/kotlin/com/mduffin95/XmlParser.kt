@@ -121,9 +121,8 @@ class XmlParser {
         unknownChildHandler = UnknownChildHandler { _, _, _, _, _ -> emptyList() }
     }
 
-    fun parse(input: String): Store {
+    fun parse(input: String): League {
         val xmlLeague = xml.decodeFromString(XmlLeague.serializer(), input)
-        val league = xmlLeague.toLeague()
-        return InMemoryStore.fromLeague(league)
+        return xmlLeague.toLeague()
     }
 }
