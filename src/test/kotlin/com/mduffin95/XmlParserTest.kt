@@ -9,9 +9,10 @@ class XmlParserTest {
     fun shouldParse() {
         val fileContent = XmlParser::class.java.getResource("ttr1.xml").readText()
 
-        val store = XmlParser().parse(fileContent)
+        val league = XmlParser().parse(fileContent)
+        val store = InMemoryStore().add(league)
 
-        val teams = store.getTeams(1763)
+        val teams = store.getTeams()
         assertEquals(4, teams.size)
 
         val fixtures = store.getFixtures(9269) // Tagliatelle
