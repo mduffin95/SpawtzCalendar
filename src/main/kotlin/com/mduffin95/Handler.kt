@@ -17,7 +17,11 @@ import org.http4k.core.Request
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
 
+const val TUESDAY = 1756;
+const val THURSDAY = 1763;
+
 class Handler: RequestHandler<Map<String, Any>, String> {
+
 
     override fun handleRequest(input: Map<String, Any>, context: Context?): String {
         val logger = context?.logger ?: throw IllegalArgumentException()
@@ -25,9 +29,19 @@ class Handler: RequestHandler<Map<String, Any>, String> {
 
         val bucketName = System.getenv("BUCKET_NAME")
 
-        val tuesdayLeague = XmlParser().parse(getInput(1756))
-        val thursdayLeague = XmlParser().parse(getInput(1763))
+        val leagues = getLeagues()
+        val parseLeagues = XmlParser().parseLeagues(leagues)
+
         val store = InMemoryStore()
+            .add(parseLeagues.toLeagueInfos())
+        val tuesdaySeason = store.getSeason(TUESDAY)!!
+        val inputStringTuesday = getInput(TUESDAY, tuesdaySeason);
+        val tuesdayLeague = XmlParser().parse(inputStringTuesday)
+
+        val thursdaySeason = store.getSeason(THURSDAY)!!
+        val inputStringThursday = getInput(THURSDAY, thursdaySeason);
+        val thursdayLeague = XmlParser().parse(inputStringThursday)
+        store
             .add(tuesdayLeague)
             .add(thursdayLeague)
         createCalendarsForTeams(store)
@@ -80,14 +94,26 @@ fun createCalendarsForTeams(store: Store): List<TeamCalendar> {
     return calendarList
 }
 
-fun getInput(leagueId: Int): String {
+fun getInput(leagueId: Int, seasonId: Int): String {
     val client = JavaHttpClient()
 
     // Tuesday =
     val request = Request(Method.GET, "https://trytagrugby.spawtz.com/External/Fixtures/Feed.aspx")
         .query("Type", "Fixtures")
         .query("LeagueId", leagueId.toString())
-        .query("SeasonId", "90")
+        .query("SeasonId", seasonId.toString())
+
+    val response = client(request)
+
+    val input = response.bodyString()
+    return input
+}
+
+fun getLeagues(): String {
+    val client = JavaHttpClient()
+
+    val request = Request(Method.GET, "https://trytagrugby.spawtz.com/External/Fixtures/Feed.aspx")
+        .query("Type", "Leagues")
 
     val response = client(request)
 

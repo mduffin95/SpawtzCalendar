@@ -27,5 +27,9 @@ class XmlParserTest {
         val league = XmlParser().parseLeagues(fileContent)
 
         assertEquals(17, league.item.size)
+
+        val season = league.getSeason(1763)
+
+        assertEquals(90, season)
     }
 }

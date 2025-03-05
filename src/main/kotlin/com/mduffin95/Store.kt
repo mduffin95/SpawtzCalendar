@@ -6,4 +6,6 @@ interface Store {
 
     fun getTeams(): List<Team>
 
+    fun getSeason(leagueId: LeagueId): SeasonId?
+
 }

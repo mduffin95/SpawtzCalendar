@@ -4,7 +4,9 @@ import java.util.Map.entry
 
 class InMemoryStore(
     private val teams: MutableMap<TeamId, Team> = mutableMapOf(),
-    private val fixturesByTeam: MutableMap<TeamId, List<Fixture>> = mutableMapOf()): Store {
+    private val fixturesByTeam: MutableMap<TeamId, List<Fixture>> = mutableMapOf(),
+    private val seasonsByLeague: MutableMap<LeagueId, SeasonId> = mutableMapOf()
+): Store {
 
     override fun getFixtures(teamId: TeamId): List<Fixture> {
         return fixturesByTeam[teamId].orEmpty()
@@ -12,6 +14,10 @@ class InMemoryStore(
 
     override fun getTeams(): List<Team> {
         return teams.values.toList()
+    }
+
+    override fun getSeason(leagueId: LeagueId): SeasonId? {
+        return seasonsByLeague[leagueId]
     }
 
     fun add(league: League): InMemoryStore {
@@ -30,6 +36,13 @@ class InMemoryStore(
             .groupBy({ it.key }, { it.value })
 
         this.fixturesByTeam.putAll(fixturesByTeam)
+        return this
+    }
+
+    fun add(leagueInfos: List<LeagueInfo>): InMemoryStore {
+        for (leagueInfo in leagueInfos) {
+            seasonsByLeague.put(leagueInfo.id, leagueInfo.seasonId)
+        }
         return this
     }
 }

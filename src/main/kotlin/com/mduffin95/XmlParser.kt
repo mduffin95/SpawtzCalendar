@@ -1,5 +1,6 @@
 package com.mduffin95
 
+import com.sun.tools.javac.jvm.ByteCodes.ret
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
@@ -98,7 +99,15 @@ private data class XmlFixture(
 @XmlSerialName("Leagues")
 data class XmlLeagues(
     @XmlElement(true) val item: List<XmlLeagueItem>
-)
+) {
+    fun getSeason(leagueId: Int): Int? {
+        return item.firstOrNull { it.leagueId == leagueId }?.seasonId
+    }
+
+    fun toLeagueInfos(): List<LeagueInfo> {
+        return item.map { it.toLeagueInfo() }
+    }
+}
 
 @Serializable
 @XmlSerialName("Item")
@@ -117,7 +126,11 @@ data class XmlLeagueItem(
     @XmlSerialName("PhaseName") val phaseName: String,
     @XmlSerialName("PhaseId") val phaseId: Int,
     @XmlSerialName("HasMultiplePhases") val hasMultiplePhases: Boolean
-)
+) {
+    fun toLeagueInfo(): LeagueInfo {
+        return LeagueInfo(leagueId, leagueName, divisionId, divisionName, seasonId, seasonName)
+    }
+}
 
 
 
