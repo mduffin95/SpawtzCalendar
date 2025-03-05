@@ -94,6 +94,33 @@ private data class XmlFixture(
 }
 
 
+@Serializable
+@XmlSerialName("Leagues")
+data class XmlLeagues(
+    @XmlElement(true) val item: List<XmlLeagueItem>
+)
+
+@Serializable
+@XmlSerialName("Item")
+data class XmlLeagueItem(
+    @XmlSerialName("LeagueId") val leagueId: Int,
+    @XmlSerialName("LeagueName") val leagueName: String,
+    @XmlSerialName("LeagueType") val leagueType: String,
+    @XmlSerialName("DivisionId") val divisionId: Int,
+    @XmlSerialName("DivisionName") val divisionName: String,
+    @XmlSerialName("SeasonId") val seasonId: Int,
+    @XmlSerialName("SeasonName") val seasonName: String,
+    @XmlSerialName("SportId") val sportId: Int,
+    @XmlSerialName("Sport") val sport: String,
+    @XmlSerialName("Class") val classType: String,
+    @XmlSerialName("Junior") val junior: Boolean,
+    @XmlSerialName("PhaseName") val phaseName: String,
+    @XmlSerialName("PhaseId") val phaseId: Int,
+    @XmlSerialName("HasMultiplePhases") val hasMultiplePhases: Boolean
+)
+
+
+
 private object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 
     private const val PATTERN = "dd/MM/yyyy HH:mm"
@@ -124,5 +151,10 @@ class XmlParser {
     fun parse(input: String): League {
         val xmlLeague = xml.decodeFromString(XmlLeague.serializer(), input)
         return xmlLeague.toLeague()
+    }
+
+    fun parseLeagues(input: String): XmlLeagues {
+        val xmlLeagues = xml.decodeFromString(XmlLeagues.serializer(), input)
+        return xmlLeagues
     }
 }

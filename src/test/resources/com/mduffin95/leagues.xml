@@ -1,0 +1,53 @@
+<Leagues>
+  <Item LeagueId="1763" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)" LeagueType="League"
+        DivisionId="9" DivisionName="Cup" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="7" HasMultiplePhases="True"/>
+  <Item LeagueId="1763" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)" LeagueType="League"
+        DivisionId="10" DivisionName="Plate (Major)" SeasonId="90" SeasonName="Spring 2025" SportId="4"
+        Sport="Tag Rugby" Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="7" HasMultiplePhases="True"/>
+  <Item LeagueId="1763" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)" LeagueType="League"
+        DivisionId="11" DivisionName="Plate (Minor)" SeasonId="90" SeasonName="Spring 2025" SportId="4"
+        Sport="Tag Rugby" Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="7" HasMultiplePhases="True"/>
+  <Item LeagueId="1763" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)" LeagueType="League"
+        DivisionId="7288" DivisionName="Division 1" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="First phase" PhaseId="0" HasMultiplePhases="True"/>
+  <Item LeagueId="1763" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Thursday)" LeagueType="League"
+        DivisionId="7289" DivisionName="Division 2" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="First phase" PhaseId="0" HasMultiplePhases="True"/>
+  <Item LeagueId="1756" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Tuesday)" LeagueType="League"
+        DivisionId="6" DivisionName="Cup" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="6" HasMultiplePhases="True"/>
+  <Item LeagueId="1756" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Tuesday)" LeagueType="League"
+        DivisionId="7" DivisionName="Plate (Major)" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="6" HasMultiplePhases="True"/>
+  <Item LeagueId="1756" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Tuesday)" LeagueType="League"
+        DivisionId="8" DivisionName="Plate (Minor)" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="Finals" PhaseId="6" HasMultiplePhases="True"/>
+  <Item LeagueId="1756" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Tuesday)" LeagueType="League"
+        DivisionId="7274" DivisionName="Division 1" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="First phase" PhaseId="0" HasMultiplePhases="True"/>
+  <Item LeagueId="1756" LeagueName="Brighton &amp; Hove - Cardinal Newman Spring (Tuesday)" LeagueType="League"
+        DivisionId="7285" DivisionName="Division 2" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="First phase" PhaseId="0" HasMultiplePhases="True"/>
+  <Item LeagueId="1686" LeagueName="Burgess Park (Old Kent Rd - 6-a-side)" LeagueType="League" DivisionId="7204"
+        DivisionName="Open Grade" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby" Class="Mixed"
+        Junior="False" PhaseName="" PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="962" LeagueName="Canada Water (Southwark Park Athletics Stadium)" LeagueType="League"
+        DivisionId="7179" DivisionName="Division 1" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="" PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="962" LeagueName="Canada Water (Southwark Park Athletics Stadium)" LeagueType="League"
+        DivisionId="7180" DivisionName="Division 2" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="" PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="492" LeagueName="Catford-Lewisham" LeagueType="League" DivisionId="7068" DivisionName="Open Grade"
+        SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby" Class="Mixed" Junior="False" PhaseName=""
+        PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="1774" LeagueName="Chiswick - Special Women's Offer" LeagueType="League" DivisionId="0" DivisionName=""
+        SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby" Class="Mixed" Junior="False" PhaseName=""
+        PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="1023" LeagueName="Chiswick (King's House Sports Ground - 6-a-side)" LeagueType="League"
+        DivisionId="7047" DivisionName="Open Grade" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="" PhaseId="0" HasMultiplePhases="False"/>
+  <Item LeagueId="742" LeagueName="Clapham Junction (Falcon Park - Monday - 6-a-side)" LeagueType="League"
+        DivisionId="7054" DivisionName="Open Grade" SeasonId="90" SeasonName="Spring 2025" SportId="4" Sport="Tag Rugby"
+        Class="Mixed" Junior="False" PhaseName="" PhaseId="0" HasMultiplePhases="False"/>
+</Leagues>

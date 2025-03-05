@@ -18,4 +18,14 @@ class XmlParserTest {
         val fixtures = store.getFixtures(9269) // Tagliatelle
         assertEquals(3, fixtures.size)
     }
+
+
+    @Test
+    fun shouldParseLeagues() {
+        val fileContent = XmlParser::class.java.getResource("leagues.xml").readText()
+
+        val league = XmlParser().parseLeagues(fileContent)
+
+        assertEquals(17, league.item.size)
+    }
 }
