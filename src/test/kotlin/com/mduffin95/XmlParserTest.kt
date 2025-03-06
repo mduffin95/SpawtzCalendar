@@ -7,7 +7,7 @@ class XmlParserTest {
 
     @Test
     fun shouldParse() {
-        val fileContent = XmlParser::class.java.getResource("ttr1.xml").readText()
+        val fileContent = XmlParser::class.java.getResource("fixtures.xml").readText()
 
         val league = XmlParser().parse(fileContent)
         val store = InMemoryStore().add(league)

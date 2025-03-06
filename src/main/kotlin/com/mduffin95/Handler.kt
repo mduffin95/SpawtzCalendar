@@ -7,9 +7,9 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.RequestHandler
 import kotlinx.coroutines.runBlocking
 import net.fortuna.ical4j.data.CalendarOutputter
-import net.fortuna.ical4j.model.Calendar
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
+import net.fortuna.ical4j.model.property.Uid
 import net.fortuna.ical4j.util.RandomUidGenerator
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
@@ -21,7 +21,6 @@ const val TUESDAY = 1756;
 const val THURSDAY = 1763;
 
 class Handler: RequestHandler<Map<String, Any>, String> {
-
 
     override fun handleRequest(input: Map<String, Any>, context: Context?): String {
         val logger = context?.logger ?: throw IllegalArgumentException()
@@ -73,27 +72,6 @@ class Handler: RequestHandler<Map<String, Any>, String> {
     }
 }
 
-fun createCalendarsForTeams(store: Store): List<TeamCalendar> {
-    val teams = store.getTeams()
-    val calendarList = mutableListOf<TeamCalendar>()
-    for (team in teams) {
-        val fixtures = store.getFixtures(team.id)
-        val events = fixtures.stream()
-            .map { fromFixture(it) }
-            .toList()
-
-        val calendar = Calendar()
-            .withProdId("-//Events Calendar//iCal4j 1.0//EN")
-            .withDefaults()
-
-        events.forEach { event -> calendar.withComponent(event) }
-        val cal = calendar.fluentTarget
-
-        calendarList.add(TeamCalendar(team, cal))
-    }
-    return calendarList
-}
-
 fun getInput(leagueId: Int, seasonId: Int): String {
     val client = JavaHttpClient()
 
@@ -131,19 +109,17 @@ fun outputCalendar(teamCalendar: TeamCalendar): String {
     return byteArrayOutputStream.toString("UTF-8")
 }
 
-fun fromFixture(fixture: Fixture): VEvent {
+fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
     val registry = TimeZoneRegistryFactory.getInstance().createRegistry()
     val tz = registry.getTimeZone("Europe/London").vTimeZone
     val start = fixture.dateTime
     val end = start.plus(fixture.duration)
 
     val eventName = "${fixture.homeTeam.name} vs ${fixture.awayTeam.name}"
-    val ug = RandomUidGenerator()
 
-    //    val start =
     val meeting: VEvent = VEvent(start, end, eventName)
         .withProperty(tz.timeZoneId)
-        .withProperty(ug.generateUid())
+        .withProperty(uidGenerator.invoke())
         .fluentTarget as VEvent
     return meeting
 }
