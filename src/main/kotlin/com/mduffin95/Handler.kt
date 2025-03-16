@@ -27,6 +27,7 @@ class Handler: RequestHandler<Map<String, Any>, String> {
         logger.log("input map: $input")
 
         val bucketName = System.getenv("BUCKET_NAME")
+        val websiteBucketName = System.getenv("WEBSITE_BUCKET_NAME")
 
         val leagues = getLeagues()
         val parseLeagues = XmlParser().parseLeagues(leagues)
@@ -50,6 +51,10 @@ class Handler: RequestHandler<Map<String, Any>, String> {
                 runBlocking { putObject(bucketName, "calendar/v1/${it.team.id}.ics", byteStream) }
             }
 
+        // store index.html
+        val html = printHtml(store.getTeams())
+        runBlocking { putObject(websiteBucketName, "index.html", ByteStream.fromString(html), "text/html") }
+
         return "OK"
     }
 
@@ -57,12 +62,14 @@ class Handler: RequestHandler<Map<String, Any>, String> {
         bucketName: String,
         objectKey: String,
         calendarString: ByteStream,
+        contentTypeString: String? = null
     ) {
         val request =
             PutObjectRequest {
                 bucket = bucketName
                 key = objectKey
                 body = calendarString
+                contentType = contentTypeString
             }
 
         S3Client { region = "eu-west-1" }.use { s3 ->
@@ -122,4 +129,101 @@ fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
         .withProperty(uidGenerator.invoke())
         .fluentTarget as VEvent
     return meeting
+}
+
+fun printHtml(teams: List<Team>): String {
+    val teamsSorted = teams.sortedBy { it.name } // Sort teams alphabetically
+
+    val teamOptions = buildString {
+        append("<option value=\"\">-- Select a Team --</option>")
+        teamsSorted.forEach { team ->
+            append("<option value=\"${team.id}\">${team.name}</option>")
+        }
+    }
+
+    val html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Team Lookup</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f9;
+                margin: 50px;
+              }
+              .container {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+              h1 {
+                color: #333;
+              }
+              select, button {
+                margin: 10px;
+                padding: 10px;
+                font-size: 16px;
+                width: calc(100% - 20px);
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                text-align: center;
+              }
+              button {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                cursor: pointer;
+              }
+              button:hover {
+                background-color: #218838;
+              }
+              #result {
+                margin-top: 20px;
+                font-size: 20px;
+                font-weight: bold;
+                color: #555;
+                word-break: break-all;
+              }
+            </style>
+        </head>
+        <body>
+        <div class="container">
+            <h1>Team Calendar Lookup</h1>
+            <label for="teamSelect">Choose a team:</label>
+            <select id="teamSelect">
+                $teamOptions
+            </select>
+            <button onclick="lookupTeam()">Get Calendar!</button>
+            <p id="result"></p>
+        </div>
+        <script>
+          function lookupTeam() {
+            const select = document.getElementById("teamSelect");
+            const result = document.getElementById("result");
+            const teamID = select.value;
+
+            if (teamID) {
+              const url = `https://spawtz-calendar-calendarbucket-xvug78kqlk9n.s3.eu-west-1.amazonaws.com/calendar/v1/${'$'}{teamID}.ics`;
+              result.innerHTML = `<a href="${'$'}{url}" target="_blank">${'$'}{url}</a>`;
+            } else {
+              result.textContent = "Please select a team.";
+            }
+          }
+        </script>
+        </body>
+        </html>
+    """.trimIndent()
+
+//    println(html) // Or send it as a response from your server.
+    return html
 }
