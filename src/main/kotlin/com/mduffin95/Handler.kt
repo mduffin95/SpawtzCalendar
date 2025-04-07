@@ -10,12 +10,13 @@ import net.fortuna.ical4j.data.CalendarOutputter
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
 import net.fortuna.ical4j.model.property.Uid
-import net.fortuna.ical4j.util.RandomUidGenerator
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
 import org.http4k.core.Request
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 const val TUESDAY = 1756;
 const val THURSDAY = 1763;
@@ -118,14 +119,15 @@ fun outputCalendar(teamCalendar: TeamCalendar): String {
 
 fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
     val registry = TimeZoneRegistryFactory.getInstance().createRegistry()
-    val tz = registry.getTimeZone("Europe/London").vTimeZone
-    val start = fixture.dateTime
+    val timeZone = registry.getTimeZone("Europe/London")
+//    val vTimeZone = timeZone.vTimeZone
+    val start = ZonedDateTime.ofLocal(fixture.dateTime, timeZone.toZoneId(), ZoneOffset.of("Z"))
     val end = start.plus(fixture.duration)
 
     val eventName = "${fixture.homeTeam.name} vs ${fixture.awayTeam.name}"
 
     val meeting: VEvent = VEvent(start, end, eventName)
-        .withProperty(tz.timeZoneId)
+        .withProperty(timeZone.vTimeZone.timeZoneId)
         .withProperty(uidGenerator.invoke())
         .fluentTarget as VEvent
     return meeting
