@@ -35,11 +35,11 @@ class Handler: RequestHandler<Map<String, Any>, String> {
 
         val store = InMemoryStore()
             .add(parseLeagues.toLeagueInfos())
-        val tuesdaySeason = store.getSeason(TUESDAY)!!
+        val tuesdaySeason = store.getSeason(TUESDAY) ?: 90
         val inputStringTuesday = getInput(TUESDAY, tuesdaySeason);
         val tuesdayLeague = XmlParser().parse(inputStringTuesday)
 
-        val thursdaySeason = store.getSeason(THURSDAY)!!
+        val thursdaySeason = store.getSeason(THURSDAY) ?: 90
         val inputStringThursday = getInput(THURSDAY, thursdaySeason);
         val thursdayLeague = XmlParser().parse(inputStringThursday)
         store
