@@ -19,8 +19,8 @@ import java.io.ByteArrayOutputStream
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-const val TUESDAY = 1756;
-const val THURSDAY = 1763;
+const val TUESDAY : LeagueId = 1756;
+const val THURSDAY : LeagueId = 1763;
 
 class Handler: RequestHandler<Map<String, Any>, String> {
 
@@ -81,7 +81,7 @@ class Handler: RequestHandler<Map<String, Any>, String> {
     }
 }
 
-fun getInput(leagueId: Int, seasonId: Int): String {
+fun getInput(leagueId: LeagueId, seasonId: SeasonId): String {
     val client = JavaHttpClient()
 
     // Tuesday =
@@ -133,3 +133,19 @@ fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
     return meeting
 }
 
+fun getLatestSeasonForLeague(leagueId: LeagueId): League? {
+    for (seasonId in 90..200) {
+        val input = getInput(leagueId, seasonId)
+        val league = XmlParser().parse(input)
+        if (league.fixtures.isNotEmpty()) {
+            return league
+        }
+    }
+
+    return null
+}
+
+fun getLeague(leagueId: LeagueId, seasonId: SeasonId): League {
+    val input = getInput(leagueId, seasonId)
+    return XmlParser().parse(input)
+}

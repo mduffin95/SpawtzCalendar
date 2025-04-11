@@ -1,28 +1,21 @@
 package com.mduffin95
 
+import getHtml
+
 fun main() {
     val leagues = getLeagues()
     val parseLeagues = XmlParser().parseLeagues(leagues)
 
     val store = InMemoryStore()
         .add(parseLeagues.toLeagueInfos())
-    val tuesdaySeason = store.getSeason(TUESDAY)!!
-    val inputStringTuesday = getInput(TUESDAY, tuesdaySeason);
-    val tuesdayLeague = XmlParser().parse(inputStringTuesday)
+    val tuesdayLeague = store.getSeason(TUESDAY)?.let { getLeague(TUESDAY, it) } ?: getLatestSeasonForLeague(TUESDAY)!!
 
-    val thursdaySeason = store.getSeason(THURSDAY)!!
-    val inputStringThursday = getInput(THURSDAY, thursdaySeason);
-    val thursdayLeague = XmlParser().parse(inputStringThursday)
+    val thursdayLeague = store.getSeason(THURSDAY)?.let { getLeague(THURSDAY, it) } ?: getLatestSeasonForLeague(THURSDAY)!!
 
     store
         .add(tuesdayLeague)
         .add(thursdayLeague)
-    val calendar = createCalendarsForTeams(store)
+    val html = getHtml(store.getTeams())
 
-    calendar.forEach {
-        println(outputCalendar(it))
-    }
-
-    println(calendar)
+    println(html)
 }
-
