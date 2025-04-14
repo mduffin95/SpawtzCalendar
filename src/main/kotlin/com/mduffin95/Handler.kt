@@ -10,12 +10,17 @@ import kotlinx.coroutines.runBlocking
 import net.fortuna.ical4j.data.CalendarOutputter
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
+import net.fortuna.ical4j.model.property.DtEnd
+import net.fortuna.ical4j.model.property.DtStamp
+import net.fortuna.ical4j.model.property.DtStart
+import net.fortuna.ical4j.model.property.Summary
 import net.fortuna.ical4j.model.property.Uid
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
 import org.http4k.core.Request
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
+import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
@@ -46,7 +51,7 @@ class Handler: RequestHandler<Map<String, Any>, String> {
         store
             .add(tuesdayLeague)
             .add(thursdayLeague)
-        createCalendarsForTeams(store)
+        createCalendarsForTeams(store, Instant.now())
             .forEach {
                 val str = outputCalendar(it)
                 val byteStream = ByteStream.fromString(str)
@@ -118,7 +123,7 @@ fun outputCalendar(teamCalendar: TeamCalendar): String {
     return byteArrayOutputStream.toString("UTF-8")
 }
 
-fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
+fun fromFixture(fixture: Fixture, createdInstant: Instant, uidGenerator: () -> Uid): VEvent {
     val registry = TimeZoneRegistryFactory.getInstance().createRegistry()
     val timeZone = registry.getTimeZone("Europe/London")
     val start = ZonedDateTime.ofLocal(fixture.dateTime, timeZone.toZoneId(), ZoneOffset.of("Z"))
@@ -126,7 +131,12 @@ fun fromFixture(fixture: Fixture, uidGenerator: () -> Uid): VEvent {
 
     val eventName = "${fixture.homeTeam.name} vs ${fixture.awayTeam.name}"
 
-    val meeting: VEvent = VEvent(start, end, eventName)
+    var meeting: VEvent = VEvent(false)
+    meeting = meeting.add(DtStamp(createdInstant))
+    meeting = meeting.add(DtStart(start));
+    meeting = meeting.add(DtEnd(end));
+    meeting = meeting.add(Summary(eventName));
+    meeting = meeting
         .withProperty(timeZone.vTimeZone.timeZoneId)
         .withProperty(uidGenerator.invoke())
         .fluentTarget as VEvent
