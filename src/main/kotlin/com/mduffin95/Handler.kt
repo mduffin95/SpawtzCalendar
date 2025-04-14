@@ -3,9 +3,12 @@ package com.mduffin95
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
 import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.text.byteCountUtf8
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.RequestHandler
 import getHtml
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import net.fortuna.ical4j.data.CalendarOutputter
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
@@ -37,15 +40,29 @@ class Handler: RequestHandler<Map<String, Any>, String> {
         val websiteBucketName = System.getenv("WEBSITE_BUCKET_NAME")
 
         logger.log("Getting league information")
+        val outputter = Outputter { teamId, byteStream -> putObject(bucketName, "calendar/v1/${teamId}.ics", byteStream) }
+        val websiteOutputter = WebsiteOutputter { putObject(websiteBucketName, "index.html", it, "text/html") }
+
+        handle(logger, outputter, websiteOutputter)
+        return "OK"
+    }
+
+    fun handle(
+        logger: LambdaLogger,
+        outputter: Outputter,
+        websiteOutputter: WebsiteOutputter
+    ) {
         val leagues = getLeagues()
         val parseLeagues = XmlParser().parseLeagues(leagues)
 
         val store = InMemoryStore()
             .add(parseLeagues.toLeagueInfos())
         logger.log("Getting Tuesday league")
-        val tuesdayLeague = store.getSeason(TUESDAY)?.let { getLeague(TUESDAY, it) } ?: getLatestSeasonForLeague(TUESDAY)!!
+        val tuesdayLeague =
+            store.getSeason(TUESDAY)?.let { getLeague(TUESDAY, it) } ?: getLatestSeasonForLeague(TUESDAY)!!
         logger.log("Getting Thursday league")
-        val thursdayLeague = store.getSeason(THURSDAY)?.let { getLeague(THURSDAY, it) } ?: getLatestSeasonForLeague(THURSDAY)!!
+        val thursdayLeague =
+            store.getSeason(THURSDAY)?.let { getLeague(THURSDAY, it) } ?: getLatestSeasonForLeague(THURSDAY)!!
 
         store
             .add(tuesdayLeague)
@@ -56,16 +73,15 @@ class Handler: RequestHandler<Map<String, Any>, String> {
             .forEach {
                 val str = outputCalendar(it)
                 val byteStream = ByteStream.fromString(str)
-                runBlocking { putObject(bucketName, "calendar/v1/${it.team.id}.ics", byteStream) }
+                runBlocking { outputter.output(it.team.id, byteStream) }
             }
 
         logger.log("Storing index.html")
         // store index.html
         val html = getHtml(store.getTeams())
-        runBlocking { putObject(websiteBucketName, "index.html", ByteStream.fromString(html), "text/html") }
+        runBlocking { websiteOutputter.output(ByteStream.fromString(html)) }
 
         logger.log("Done!")
-        return "OK"
     }
 
     suspend fun putObject(
@@ -161,4 +177,30 @@ fun getLatestSeasonForLeague(leagueId: LeagueId): League? {
 fun getLeague(leagueId: LeagueId, seasonId: SeasonId): League {
     val input = getInput(leagueId, seasonId)
     return XmlParser().parse(input)
+}
+
+fun main() {
+    val logger = TestLogger()
+    val testOutputter = Outputter { teamId: TeamId, byteStream: ByteStream -> delay(100) }
+    val testWebsiteOutputter = WebsiteOutputter { byteStream: ByteStream -> delay(100) }
+    Handler().handle(logger, testOutputter, testWebsiteOutputter)
+}
+
+fun interface Outputter {
+    suspend fun output(teamId: TeamId, byteStream: ByteStream)
+}
+
+fun interface WebsiteOutputter {
+    suspend fun output(byteStream: ByteStream)
+}
+
+class TestLogger : LambdaLogger {
+    override fun log(message: String?) {
+        println(message)
+    }
+
+    override fun log(message: ByteArray?) {
+        println(message)
+    }
+
 }
