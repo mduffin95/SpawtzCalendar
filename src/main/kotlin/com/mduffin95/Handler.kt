@@ -36,21 +36,22 @@ class Handler: RequestHandler<Map<String, Any>, String> {
         val bucketName = System.getenv("BUCKET_NAME")
         val websiteBucketName = System.getenv("WEBSITE_BUCKET_NAME")
 
+        logger.log("Getting league information")
         val leagues = getLeagues()
         val parseLeagues = XmlParser().parseLeagues(leagues)
 
         val store = InMemoryStore()
             .add(parseLeagues.toLeagueInfos())
-        val tuesdaySeason = store.getSeason(TUESDAY) ?: 90
-        val inputStringTuesday = getInput(TUESDAY, tuesdaySeason);
-        val tuesdayLeague = XmlParser().parse(inputStringTuesday)
+        logger.log("Getting Tuesday league")
+        val tuesdayLeague = store.getSeason(TUESDAY)?.let { getLeague(TUESDAY, it) } ?: getLatestSeasonForLeague(TUESDAY)!!
+        logger.log("Getting Thursday league")
+        val thursdayLeague = store.getSeason(THURSDAY)?.let { getLeague(THURSDAY, it) } ?: getLatestSeasonForLeague(THURSDAY)!!
 
-        val thursdaySeason = store.getSeason(THURSDAY) ?: 90
-        val inputStringThursday = getInput(THURSDAY, thursdaySeason);
-        val thursdayLeague = XmlParser().parse(inputStringThursday)
         store
             .add(tuesdayLeague)
             .add(thursdayLeague)
+
+        logger.log("Creating calendar")
         createCalendarsForTeams(store, Instant.now())
             .forEach {
                 val str = outputCalendar(it)
@@ -58,10 +59,12 @@ class Handler: RequestHandler<Map<String, Any>, String> {
                 runBlocking { putObject(bucketName, "calendar/v1/${it.team.id}.ics", byteStream) }
             }
 
+        logger.log("Storing index.html")
         // store index.html
         val html = getHtml(store.getTeams())
         runBlocking { putObject(websiteBucketName, "index.html", ByteStream.fromString(html), "text/html") }
 
+        logger.log("Done!")
         return "OK"
     }
 
