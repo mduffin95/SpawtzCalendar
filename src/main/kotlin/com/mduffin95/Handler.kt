@@ -24,8 +24,8 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-const val TUESDAY : LeagueId = 1756;
-const val THURSDAY : LeagueId = 1763;
+const val TUESDAY : LeagueId = 1564
+const val THURSDAY : LeagueId = 1862
 
 class Handler: RequestHandler<Map<String, Any>, String> {
 
