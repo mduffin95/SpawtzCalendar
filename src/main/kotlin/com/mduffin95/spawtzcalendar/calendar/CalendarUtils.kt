@@ -12,24 +12,11 @@ import net.fortuna.ical4j.model.property.DtStamp
 import net.fortuna.ical4j.model.property.DtStart
 import net.fortuna.ical4j.model.property.Summary
 import net.fortuna.ical4j.model.property.Uid
-import net.fortuna.ical4j.util.RandomUidGenerator
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-
-fun createCalendarsForTeams(fixtureStore: FixtureStore, createdInstant: Instant): List<TeamCalendar> {
-    val teams = fixtureStore.getTeams()
-    val calendarList = mutableListOf<TeamCalendar>()
-    val ug = RandomUidGenerator()
-    for (team in teams) {
-        val fixtures = fixtureStore.getFixtures(team.id)
-        val teamCalendar = teamCalendar(team, fixtures, createdInstant, ug::generateUid)
-        calendarList.add(teamCalendar)
-    }
-    return calendarList
-}
 
 fun teamCalendar(team: Team, fixtures: List<Fixture>, createdInstant: Instant, uidGenerator: () -> Uid): TeamCalendar {
     val events = fixtures.stream()

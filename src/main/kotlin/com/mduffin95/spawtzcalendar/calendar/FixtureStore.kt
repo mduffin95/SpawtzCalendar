@@ -6,7 +6,10 @@ import com.mduffin95.spawtzcalendar.model.LeagueId
 import com.mduffin95.spawtzcalendar.model.LeagueInfo
 import com.mduffin95.spawtzcalendar.model.SeasonId
 import com.mduffin95.spawtzcalendar.model.Team
+import com.mduffin95.spawtzcalendar.model.TeamCalendar
 import com.mduffin95.spawtzcalendar.model.TeamId
+import net.fortuna.ical4j.util.RandomUidGenerator
+import java.time.Instant
 import java.util.Map
 
 interface FixtureStore {
@@ -20,6 +23,8 @@ interface FixtureStore {
     fun add(league: League): FixtureStore
 
     fun add(leagueInfos: List<LeagueInfo>): FixtureStore
+
+    fun createCalendarsForTeams(createdInstant: Instant): List<TeamCalendar>
 
 }
 
@@ -65,6 +70,18 @@ private class InMemoryFixtureStore(
             seasonsByLeague.put(leagueInfo.id, leagueInfo.seasonId)
         }
         return this
+    }
+
+    override fun createCalendarsForTeams(createdInstant: Instant): List<TeamCalendar> {
+        val teams = getTeams()
+        val calendarList = mutableListOf<TeamCalendar>()
+        val ug = RandomUidGenerator()
+        for (team in teams) {
+            val fixtures = getFixtures(team.id)
+            val teamCalendar = teamCalendar(team, fixtures, createdInstant, ug::generateUid)
+            calendarList.add(teamCalendar)
+        }
+        return calendarList
     }
 }
 

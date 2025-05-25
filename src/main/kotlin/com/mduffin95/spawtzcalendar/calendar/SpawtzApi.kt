@@ -7,9 +7,6 @@ import org.http4k.client.JavaHttpClient
 import org.http4k.core.Method
 import org.http4k.core.Request
 
-class SpawtzSiteService {
-}
-
 fun getLeague(leagueId: LeagueId, seasonId: SeasonId): League {
     val input = getInput(leagueId, seasonId)
     return XmlParser().parse(input)

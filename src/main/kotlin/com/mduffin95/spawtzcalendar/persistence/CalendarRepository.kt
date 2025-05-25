@@ -1,4 +1,4 @@
-package com.mduffin95.spawtzcalendar.repository
+package com.mduffin95.spawtzcalendar.persistence
 
 import aws.smithy.kotlin.runtime.content.ByteStream
 import com.mduffin95.spawtzcalendar.calendar.outputCalendar

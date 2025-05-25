@@ -1,4 +1,4 @@
-package com.mduffin95.spawtzcalendar.repository
+package com.mduffin95.spawtzcalendar.persistence
 
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest

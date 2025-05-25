@@ -1,9 +1,43 @@
+package com.mduffin95.spawtzcalendar.persistence
+
+import aws.smithy.kotlin.runtime.content.ByteStream
 import com.mduffin95.spawtzcalendar.model.Team
-import kotlinx.html.*
+import com.mduffin95.spawtzcalendar.persistence.getHtml
+import kotlinx.coroutines.runBlocking
+import kotlinx.html.body
+import kotlinx.html.button
+import kotlinx.html.div
+import kotlinx.html.h1
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.id
+import kotlinx.html.label
+import kotlinx.html.meta
+import kotlinx.html.onClick
+import kotlinx.html.option
+import kotlinx.html.p
+import kotlinx.html.script
+import kotlinx.html.select
 import kotlinx.html.stream.appendHTML
+import kotlinx.html.style
+import kotlinx.html.title
+import kotlinx.html.unsafe
 import java.io.StringWriter
 
-fun getHtml(teams: List<Team>) : String {
+interface WebsiteRepository {
+    fun store(teams: List<Team>)
+}
+
+class S3WebsiteRepository(val bucketName: String): WebsiteRepository {
+
+    override fun store(teams: List<Team>) {
+        val html = getHtml(teams)
+        runBlocking { putObject(bucketName, "index.html", ByteStream.fromString(html), "text/html") }
+    }
+
+}
+
+private fun getHtml(teams: List<Team>) : String {
     val teamsSorted = teams.sortedBy { it.name } // Sort teams alphabetically
     val sw = StringWriter()
     sw.use { writer ->
