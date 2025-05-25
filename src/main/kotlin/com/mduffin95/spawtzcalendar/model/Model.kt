@@ -1,13 +1,9 @@
-package com.mduffin95
+package com.mduffin95.spawtzcalendar.model
 
-import kotlinx.serialization.Serializable
 import net.fortuna.ical4j.model.Calendar
-import nl.adaptivity.xmlutil.serialization.XmlElement
-import nl.adaptivity.xmlutil.serialization.XmlSerialName
 import java.time.Duration
 import java.time.LocalDateTime
 
-//data class TeamId(val id: String)
 typealias TeamId = Int
 typealias LeagueId = Int
 typealias FixtureId = Int

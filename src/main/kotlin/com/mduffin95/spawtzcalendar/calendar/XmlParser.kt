@@ -1,6 +1,9 @@
-package com.mduffin95
+package com.mduffin95.spawtzcalendar.calendar
 
-import com.sun.tools.javac.jvm.ByteCodes.ret
+import com.mduffin95.spawtzcalendar.model.Fixture
+import com.mduffin95.spawtzcalendar.model.League
+import com.mduffin95.spawtzcalendar.model.LeagueInfo
+import com.mduffin95.spawtzcalendar.model.Team
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
@@ -131,8 +134,6 @@ data class XmlLeagueItem(
         return LeagueInfo(leagueId, leagueName, divisionId, divisionName, seasonId, seasonName)
     }
 }
-
-
 
 private object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
 

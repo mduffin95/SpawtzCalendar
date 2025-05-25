@@ -1,4 +1,4 @@
-import com.mduffin95.Team
+import com.mduffin95.spawtzcalendar.model.Team
 import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 import java.io.StringWriter

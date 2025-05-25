@@ -1,17 +1,18 @@
-package com.mduffin95
+package com.mduffin95.spawtzcalendar
 
+import com.mduffin95.spawtzcalendar.calendar.XmlParser
+import com.mduffin95.spawtzcalendar.calendar.getFixtureStore
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class XmlParserTest {
 
     @Test
-    fun shouldParse() {
+    fun `should parse teams and their fixtures`() {
         val fileContent = XmlParser::class.java.getResource("fixtures.xml").readText()
 
         val league = XmlParser().parse(fileContent)
-        val store = InMemoryStore().add(league)
+        val store = getFixtureStore().add(league)
 
         val teams = store.getTeams()
         assertEquals(4, teams.size)
@@ -22,7 +23,7 @@ class XmlParserTest {
 
 
     @Test
-    fun shouldParseLeagues() {
+    fun `should parse leagues`() {
         val fileContent = XmlParser::class.java.getResource("leagues.xml").readText()
 
         val league = XmlParser().parseLeagues(fileContent)

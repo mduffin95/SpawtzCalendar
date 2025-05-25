@@ -1,6 +1,9 @@
-package com.mduffin95
+package com.mduffin95.spawtzcalendar
 
-import net.fortuna.ical4j.model.property.DtStamp
+import com.mduffin95.spawtzcalendar.calendar.outputCalendar
+import com.mduffin95.spawtzcalendar.calendar.teamCalendar
+import com.mduffin95.spawtzcalendar.model.Fixture
+import com.mduffin95.spawtzcalendar.model.Team
 import net.fortuna.ical4j.model.property.Uid
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -20,7 +23,6 @@ class CalendarUtilsTest {
 
         val str = outputCalendar(calendar)
 
-//        val dtStamp = DtStamp().toString().trimEnd()
         val expected = """
             BEGIN:VCALENDAR
             PRODID:-//Events Calendar//iCal4j 1.0//EN
@@ -38,6 +40,5 @@ class CalendarUtilsTest {
             
         """.trimIndent().replace("\n", "\r\n")
         assertEquals(expected, str)
-        println(str)
     }
 }
