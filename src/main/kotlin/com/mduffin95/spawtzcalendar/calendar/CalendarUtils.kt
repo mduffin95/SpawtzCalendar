@@ -3,7 +3,6 @@ package com.mduffin95.spawtzcalendar.calendar
 import com.mduffin95.spawtzcalendar.model.Fixture
 import com.mduffin95.spawtzcalendar.model.Team
 import com.mduffin95.spawtzcalendar.model.TeamCalendar
-import net.fortuna.ical4j.data.CalendarOutputter
 import net.fortuna.ical4j.model.Calendar
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
@@ -12,8 +11,6 @@ import net.fortuna.ical4j.model.property.DtStamp
 import net.fortuna.ical4j.model.property.DtStart
 import net.fortuna.ical4j.model.property.Summary
 import net.fortuna.ical4j.model.property.Uid
-import java.io.BufferedOutputStream
-import java.io.ByteArrayOutputStream
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -52,14 +49,4 @@ private fun fromFixture(fixture: Fixture, createdInstant: Instant, uidGenerator:
         .withProperty(uidGenerator.invoke())
         .fluentTarget as VEvent
     return meeting
-}
-
-fun outputCalendar(teamCalendar: TeamCalendar): String {
-    // send the cal reference directly.
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    val bufferedOutputStream = BufferedOutputStream(byteArrayOutputStream)
-    val icsOutputter = CalendarOutputter()
-    bufferedOutputStream.use { icsOutputter.output(teamCalendar.calendar, it) }
-
-    return byteArrayOutputStream.toString("UTF-8")
 }

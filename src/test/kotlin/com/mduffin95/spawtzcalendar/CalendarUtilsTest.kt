@@ -1,6 +1,6 @@
 package com.mduffin95.spawtzcalendar
 
-import com.mduffin95.spawtzcalendar.calendar.outputCalendar
+import com.mduffin95.spawtzcalendar.persistence.outputCalendar
 import com.mduffin95.spawtzcalendar.calendar.teamCalendar
 import com.mduffin95.spawtzcalendar.model.Fixture
 import com.mduffin95.spawtzcalendar.model.Team

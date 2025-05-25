@@ -1,8 +1,10 @@
 package com.mduffin95.spawtzcalendar.persistence
 
 import aws.smithy.kotlin.runtime.content.ByteStream
-import com.mduffin95.spawtzcalendar.calendar.outputCalendar
 import com.mduffin95.spawtzcalendar.model.TeamCalendar
+import net.fortuna.ical4j.data.CalendarOutputter
+import java.io.BufferedOutputStream
+import java.io.ByteArrayOutputStream
 
 interface CalendarRepository {
     suspend fun store(teamCalendar: TeamCalendar)
@@ -18,3 +20,12 @@ class S3CalendarRepository(val bucketName: String) : CalendarRepository {
 
 }
 
+fun outputCalendar(teamCalendar: TeamCalendar): String {
+    // send the cal reference directly.
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    val bufferedOutputStream = BufferedOutputStream(byteArrayOutputStream)
+    val icsOutputter = CalendarOutputter()
+    bufferedOutputStream.use { icsOutputter.output(teamCalendar.calendar, it) }
+
+    return byteArrayOutputStream.toString("UTF-8")
+}
