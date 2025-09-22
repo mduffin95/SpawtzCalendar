@@ -16,8 +16,8 @@ import com.mduffin95.spawtzcalendar.persistence.WebsiteRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
 
-const val TUESDAY : LeagueId = 1564
-const val THURSDAY : LeagueId = 1862
+const val TUESDAY : LeagueId = 1724
+const val THURSDAY : LeagueId = 1726
 
 class Handler: RequestHandler<Map<String, Any>, String> {
 
