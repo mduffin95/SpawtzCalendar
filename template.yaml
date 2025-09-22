@@ -14,7 +14,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: build/distributions/SpawtzCalendar-1.0-SNAPSHOT.zip
-      Handler: com.mduffin95.Handler::handleRequest
+      Handler: com.mduffin95.spawtzcalendar.Handler::handleRequest
       Runtime: java21
       Environment:
         Variables:
