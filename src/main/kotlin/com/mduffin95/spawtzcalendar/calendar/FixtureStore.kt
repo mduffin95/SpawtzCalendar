@@ -11,6 +11,7 @@ import com.mduffin95.spawtzcalendar.model.TeamId
 import net.fortuna.ical4j.util.RandomUidGenerator
 import java.time.Instant
 import java.util.Map
+import java.util.regex.Pattern
 
 interface FixtureStore {
 
@@ -26,6 +27,10 @@ interface FixtureStore {
 
     fun createCalendarsForTeams(createdInstant: Instant): List<TeamCalendar>
 
+    fun findTuesdayLeagueId() : LeagueId?
+
+    fun findThursdayLeagueId() : LeagueId?
+
 }
 
 private class InMemoryFixtureStore(
@@ -33,6 +38,11 @@ private class InMemoryFixtureStore(
     private val fixturesByTeam: MutableMap<TeamId, List<Fixture>> = mutableMapOf(),
     private val seasonsByLeague: MutableMap<LeagueId, SeasonId> = mutableMapOf()
 ): FixtureStore {
+
+    val regexTuesday = Regex("""^Brighton & Hove.*\(Tuesday\)$""")
+    val regexThursday = Regex("""^Brighton & Hove.*\(Thursday\)$""")
+    var tuesdayId : LeagueId? = null
+    var thursdayId: LeagueId? = null
 
     override fun getFixtures(teamId: TeamId): List<Fixture> {
         return fixturesByTeam[teamId].orEmpty()
@@ -68,6 +78,12 @@ private class InMemoryFixtureStore(
     override fun add(leagueInfos: List<LeagueInfo>): InMemoryFixtureStore {
         for (leagueInfo in leagueInfos) {
             seasonsByLeague.put(leagueInfo.id, leagueInfo.seasonId)
+            if (regexTuesday.matches(leagueInfo.leagueName)) {
+                tuesdayId = leagueInfo.id
+            }
+            if (regexThursday.matches(leagueInfo.leagueName)) {
+                thursdayId = leagueInfo.id
+            }
         }
         return this
     }
@@ -82,6 +98,14 @@ private class InMemoryFixtureStore(
             calendarList.add(teamCalendar)
         }
         return calendarList
+    }
+
+    override fun findTuesdayLeagueId() : LeagueId? {
+        return tuesdayId
+    }
+
+    override fun findThursdayLeagueId() : LeagueId? {
+        return thursdayId
     }
 }
 
