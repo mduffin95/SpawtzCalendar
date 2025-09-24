@@ -46,9 +46,11 @@ fun generate(calRepo: CalendarRepository, webRepository: WebsiteRepository, logg
     val store = getFixtureStore()
         .add(parseLeagues.toLeagueInfos())
     logger.log("Getting Tuesday league")
-    val tuesdayLeague = store.getSeason(TUESDAY)?.let { getLeague(TUESDAY, it) } ?: getLatestSeasonForLeague(TUESDAY)!!
+    val tuesdayLeagueId = store.findTuesdayLeagueId() ?: TUESDAY
+    val thursdayLeagueId = store.findThursdayLeagueId() ?: THURSDAY
+    val tuesdayLeague = store.getSeason(tuesdayLeagueId)?.let { getLeague(tuesdayLeagueId, it) } ?: getLatestSeasonForLeague(tuesdayLeagueId)!!
     logger.log("Getting Thursday league")
-    val thursdayLeague = store.getSeason(THURSDAY)?.let { getLeague(THURSDAY, it) } ?: getLatestSeasonForLeague(THURSDAY)!!
+    val thursdayLeague = store.getSeason(thursdayLeagueId)?.let { getLeague(thursdayLeagueId, it) } ?: getLatestSeasonForLeague(thursdayLeagueId)!!
 
     store
         .add(tuesdayLeague)

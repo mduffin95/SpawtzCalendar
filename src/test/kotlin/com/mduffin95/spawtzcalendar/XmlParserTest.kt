@@ -2,7 +2,6 @@ package com.mduffin95.spawtzcalendar
 
 import com.mduffin95.spawtzcalendar.calendar.XmlParser
 import com.mduffin95.spawtzcalendar.calendar.getFixtureStore
-import com.mduffin95.spawtzcalendar.model.League
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -21,7 +20,6 @@ class XmlParserTest {
         val fixtures = store.getFixtures(9269) // Tagliatelle
         assertEquals(3, fixtures.size)
     }
-
 
     @Test
     fun `should parse leagues`() {
@@ -52,7 +50,7 @@ class XmlParserTest {
     }
 
     @Test
-    fun `should detect Brighton league v2`() {
+    fun `should detect new Brighton league`() {
         val fileContent = XmlParser::class.java.getResource("leagues_22-09-2025.xml").readText()
 
         val league = XmlParser().parseLeagues(fileContent)
