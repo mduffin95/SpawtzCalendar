@@ -18,8 +18,6 @@ interface FixtureStore {
 
     fun getTeams(): List<Team>
 
-    fun getSeason(leagueId: LeagueId): SeasonId?
-
     fun add(league: League): FixtureStore
 
     fun add(leagueInfos: List<LeagueInfo>): FixtureStore
@@ -35,7 +33,6 @@ private class InMemoryFixtureStore(
 ): FixtureStore {
 
     val regex = Regex("""^Brighton & Hove.*$""")
-    val brightonLeagues = mutableListOf<LeagueId>()
 
     override fun getFixtures(teamId: TeamId): List<Fixture> {
         return fixturesByTeam[teamId].orEmpty()
@@ -43,10 +40,6 @@ private class InMemoryFixtureStore(
 
     override fun getTeams(): List<Team> {
         return teams.values.toList()
-    }
-
-    override fun getSeason(leagueId: LeagueId): SeasonId? {
-        return seasonsByLeague[leagueId]
     }
 
     override fun add(league: League): InMemoryFixtureStore {
@@ -72,18 +65,9 @@ private class InMemoryFixtureStore(
         for (leagueInfo in leagueInfos) {
             seasonsByLeague[leagueInfo.id] = leagueInfo.seasonId
             if (regex.matches(leagueInfo.leagueName)) {
-                brightonLeagues.add(leagueInfo.id)
+                val league = getLeague(leagueInfo.id, leagueInfo.seasonId)
+                add(league)
             }
-        }
-
-        for (leagueId in brightonLeagues) {
-            val season = this.getSeason(leagueId)
-            val league = if (season != null) {
-                getLeague(leagueId, season)
-            } else {
-                getLatestSeasonForLeague(leagueId)!!
-            }
-            add(league)
         }
 
         return this

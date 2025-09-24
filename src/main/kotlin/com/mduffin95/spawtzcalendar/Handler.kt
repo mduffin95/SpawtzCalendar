@@ -35,21 +35,12 @@ fun generate(calRepo: CalendarRepository, webRepository: WebsiteRepository, logg
 
     logger.log("Getting league information")
     val leagues = getLeagues()
-    val parseLeagues = XmlParser().parseLeagues(leagues)
+    val parsedLeagues = XmlParser().parseLeagues(leagues)
 
+    logger.log("Building teams")
     val store = getFixtureStore()
-        .add(parseLeagues.toLeagueInfos())
-    logger.log("Getting Tuesday league")
-//    val tuesdayLeagueId = store.findTuesdayLeagueId() ?: TUESDAY
-//    val thursdayLeagueId = store.findThursdayLeagueId() ?: THURSDAY
-//    val tuesdayLeague = store.getSeason(tuesdayLeagueId)?.let { getLeague(tuesdayLeagueId, it) } ?: getLatestSeasonForLeague(tuesdayLeagueId)!!
-//    logger.log("Getting Thursday league")
-//    val thursdayLeague = store.getSeason(thursdayLeagueId)?.let { getLeague(thursdayLeagueId, it) } ?: getLatestSeasonForLeague(thursdayLeagueId)!!
-//
-//    store
-//        .add(tuesdayLeague)
-//        .add(thursdayLeague)
-//
+        .add(parsedLeagues.toLeagueInfos())
+
     logger.log("Creating calendar")
     store.createCalendarsForTeams(Instant.now())
         .forEach {
@@ -57,7 +48,6 @@ fun generate(calRepo: CalendarRepository, webRepository: WebsiteRepository, logg
         }
 
     logger.log("Storing index.html")
-
     webRepository.store(store.getTeams())
 
     logger.log("Done!")
