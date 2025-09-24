@@ -1,7 +1,5 @@
 package com.mduffin95.spawtzcalendar.calendar
 
-import com.mduffin95.spawtzcalendar.THURSDAY
-import com.mduffin95.spawtzcalendar.TUESDAY
 import com.mduffin95.spawtzcalendar.model.Fixture
 import com.mduffin95.spawtzcalendar.model.League
 import com.mduffin95.spawtzcalendar.model.LeagueId
@@ -13,7 +11,6 @@ import com.mduffin95.spawtzcalendar.model.TeamId
 import net.fortuna.ical4j.util.RandomUidGenerator
 import java.time.Instant
 import java.util.Map
-import java.util.regex.Pattern
 
 interface FixtureStore {
 
@@ -29,10 +26,6 @@ interface FixtureStore {
 
     fun createCalendarsForTeams(createdInstant: Instant): List<TeamCalendar>
 
-    fun findTuesdayLeagueId(): LeagueId?
-
-    fun findThursdayLeagueId(): LeagueId?
-
 }
 
 private class InMemoryFixtureStore(
@@ -41,10 +34,8 @@ private class InMemoryFixtureStore(
     private val seasonsByLeague: MutableMap<LeagueId, SeasonId> = mutableMapOf()
 ): FixtureStore {
 
-    val regexTuesday = Regex("""^Brighton & Hove.*\(Tuesday\)$""")
-    val regexThursday = Regex("""^Brighton & Hove.*\(Thursday\)$""")
-    var tuesdayId: LeagueId = TUESDAY
-    var thursdayId: LeagueId = THURSDAY
+    val regex = Regex("""^Brighton & Hove.*$""")
+    val brightonLeagues = mutableListOf<LeagueId>()
 
     override fun getFixtures(teamId: TeamId): List<Fixture> {
         return fixturesByTeam[teamId].orEmpty()
@@ -79,23 +70,16 @@ private class InMemoryFixtureStore(
 
     override fun add(leagueInfos: List<LeagueInfo>): InMemoryFixtureStore {
         for (leagueInfo in leagueInfos) {
-            seasonsByLeague.put(leagueInfo.id, leagueInfo.seasonId)
-            if (regexTuesday.matches(leagueInfo.leagueName)) {
-                tuesdayId = leagueInfo.id
-            }
-            if (regexThursday.matches(leagueInfo.leagueName)) {
-                thursdayId = leagueInfo.id
+            seasonsByLeague[leagueInfo.id] = leagueInfo.seasonId
+            if (regex.matches(leagueInfo.leagueName)) {
+                brightonLeagues.add(leagueInfo.id)
             }
         }
 
-        val tuesdayLeague =
-            this.getSeason(tuesdayId)?.let { getLeague(tuesdayId, it) } ?: getLatestSeasonForLeague(tuesdayId)!!
-        val thursdayLeague =
-            this.getSeason(thursdayId)?.let { getLeague(thursdayId, it) } ?: getLatestSeasonForLeague(thursdayId)!!
-
-        this
-            .add(tuesdayLeague)
-            .add(thursdayLeague)
+        for (leagueId in brightonLeagues) {
+            val league = this.getSeason(leagueId)?.let { getLeague(leagueId, it) } ?: getLatestSeasonForLeague(leagueId)!!
+            add(league)
+        }
 
         return this
     }
@@ -110,14 +94,6 @@ private class InMemoryFixtureStore(
             calendarList.add(teamCalendar)
         }
         return calendarList
-    }
-
-    override fun findTuesdayLeagueId(): LeagueId? {
-        return tuesdayId
-    }
-
-    override fun findThursdayLeagueId(): LeagueId? {
-        return thursdayId
     }
 }
 
