@@ -35,32 +35,24 @@ class XmlParserTest {
     }
 
     @Test
-    fun `should detect Brighton league`() {
+    fun `should detect all Brighton teams across two leagues`() {
         val fileContent = XmlParser::class.java.getResource("leagues.xml").readText()
 
         val league = XmlParser().parseLeagues(fileContent)
 
         val store = getFixtureStore().add(league.toLeagueInfos())
 
-        val tuesdayLeagueId = store.findTuesdayLeagueId()
-        val thursdayLeagueId = store.findThursdayLeagueId()
-
-        assertEquals(tuesdayLeagueId, 1756)
-        assertEquals(thursdayLeagueId, 1763)
+        assertEquals(24, store.getTeams().size)
     }
 
     @Test
-    fun `should detect new Brighton league`() {
+    fun `should detect all Brighton teams in new leagues`() {
         val fileContent = XmlParser::class.java.getResource("leagues_22-09-2025.xml").readText()
 
         val league = XmlParser().parseLeagues(fileContent)
 
         val store = getFixtureStore().add(league.toLeagueInfos())
 
-        val tuesdayLeagueId = store.findTuesdayLeagueId()
-        val thursdayLeagueId = store.findThursdayLeagueId()
-
-        assertEquals(tuesdayLeagueId, 1724)
-        assertEquals(thursdayLeagueId, 1726)
+        assertEquals(26, store.getTeams().size)
     }
 }

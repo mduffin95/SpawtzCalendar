@@ -1,5 +1,7 @@
 package com.mduffin95.spawtzcalendar.calendar
 
+import com.mduffin95.spawtzcalendar.THURSDAY
+import com.mduffin95.spawtzcalendar.TUESDAY
 import com.mduffin95.spawtzcalendar.model.Fixture
 import com.mduffin95.spawtzcalendar.model.League
 import com.mduffin95.spawtzcalendar.model.LeagueId
@@ -27,9 +29,9 @@ interface FixtureStore {
 
     fun createCalendarsForTeams(createdInstant: Instant): List<TeamCalendar>
 
-    fun findTuesdayLeagueId() : LeagueId?
+    fun findTuesdayLeagueId(): LeagueId?
 
-    fun findThursdayLeagueId() : LeagueId?
+    fun findThursdayLeagueId(): LeagueId?
 
 }
 
@@ -41,8 +43,8 @@ private class InMemoryFixtureStore(
 
     val regexTuesday = Regex("""^Brighton & Hove.*\(Tuesday\)$""")
     val regexThursday = Regex("""^Brighton & Hove.*\(Thursday\)$""")
-    var tuesdayId : LeagueId? = null
-    var thursdayId: LeagueId? = null
+    var tuesdayId: LeagueId = TUESDAY
+    var thursdayId: LeagueId = THURSDAY
 
     override fun getFixtures(teamId: TeamId): List<Fixture> {
         return fixturesByTeam[teamId].orEmpty()
@@ -85,6 +87,16 @@ private class InMemoryFixtureStore(
                 thursdayId = leagueInfo.id
             }
         }
+
+        val tuesdayLeague =
+            this.getSeason(tuesdayId)?.let { getLeague(tuesdayId, it) } ?: getLatestSeasonForLeague(tuesdayId)!!
+        val thursdayLeague =
+            this.getSeason(thursdayId)?.let { getLeague(thursdayId, it) } ?: getLatestSeasonForLeague(thursdayId)!!
+
+        this
+            .add(tuesdayLeague)
+            .add(thursdayLeague)
+
         return this
     }
 
@@ -100,15 +112,15 @@ private class InMemoryFixtureStore(
         return calendarList
     }
 
-    override fun findTuesdayLeagueId() : LeagueId? {
+    override fun findTuesdayLeagueId(): LeagueId? {
         return tuesdayId
     }
 
-    override fun findThursdayLeagueId() : LeagueId? {
+    override fun findThursdayLeagueId(): LeagueId? {
         return thursdayId
     }
 }
 
-fun getFixtureStore() : FixtureStore {
+fun getFixtureStore(): FixtureStore {
     return InMemoryFixtureStore()
 }
