@@ -5,19 +5,13 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.mduffin95.spawtzcalendar.calendar.XmlParser
 import com.mduffin95.spawtzcalendar.calendar.getFixtureStore
-import com.mduffin95.spawtzcalendar.calendar.getLatestSeasonForLeague
-import com.mduffin95.spawtzcalendar.calendar.getLeague
 import com.mduffin95.spawtzcalendar.calendar.getLeagues
-import com.mduffin95.spawtzcalendar.model.LeagueId
 import com.mduffin95.spawtzcalendar.persistence.CalendarRepository
 import com.mduffin95.spawtzcalendar.persistence.S3CalendarRepository
 import com.mduffin95.spawtzcalendar.persistence.S3WebsiteRepository
 import com.mduffin95.spawtzcalendar.persistence.WebsiteRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
-
-const val TUESDAY : LeagueId = 1724
-const val THURSDAY : LeagueId = 1726
 
 class Handler: RequestHandler<Map<String, Any>, String> {
 

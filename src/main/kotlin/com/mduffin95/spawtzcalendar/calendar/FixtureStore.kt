@@ -77,7 +77,12 @@ private class InMemoryFixtureStore(
         }
 
         for (leagueId in brightonLeagues) {
-            val league = this.getSeason(leagueId)?.let { getLeague(leagueId, it) } ?: getLatestSeasonForLeague(leagueId)!!
+            val season = this.getSeason(leagueId)
+            val league = if (season != null) {
+                getLeague(leagueId, season)
+            } else {
+                getLatestSeasonForLeague(leagueId)!!
+            }
             add(league)
         }
 
