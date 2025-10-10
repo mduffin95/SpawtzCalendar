@@ -17,7 +17,7 @@ class CalendarUtilsTest {
     fun `build team calendar with a single fixture`() {
         val team = Team(1, "Foo")
         val team2 = Team(2, "Bar")
-        val fixture = Fixture(1, team, team2, LocalDateTime.of(2024, 3, 5, 20, 0), Duration.ofMinutes(45))
+        val fixture = Fixture(1, team, team2, LocalDateTime.of(2024, 3, 5, 20, 0), Duration.ofMinutes(45), playingAreaName = "Pitch B")
         val instant = Instant.parse("2025-01-01T00:00:00.000Z")
         val calendar = teamCalendar(team, listOf(fixture), instant) { Uid("72b03de4-5e38-4bcd-9b28-f3eb4a87556b") }
 
@@ -33,6 +33,7 @@ class CalendarUtilsTest {
             DTSTART;TZID=Europe/London:20240305T200000
             DTEND;TZID=Europe/London:20240305T204500
             SUMMARY:Foo vs Bar
+            DESCRIPTION:Pitch B
             TZID:Europe/London
             UID:72b03de4-5e38-4bcd-9b28-f3eb4a87556b
             END:VEVENT

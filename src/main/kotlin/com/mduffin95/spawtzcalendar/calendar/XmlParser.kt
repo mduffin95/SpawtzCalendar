@@ -92,7 +92,8 @@ private data class XmlFixture(
             Team(homeTeamId, homeTeam),
             Team(awayTeamId, awayTeam),
             dateTime.toJavaLocalDateTime(),
-            Duration.ofMinutes(duration.toLong())
+            Duration.ofMinutes(duration.toLong()),
+            playingAreaName
         )
     }
 }

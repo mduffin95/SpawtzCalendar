@@ -11,7 +11,7 @@ typealias SeasonId = Int
 
 data class Team(val id: TeamId, val name: String)
 
-data class Fixture(val id: FixtureId, val homeTeam: Team, val awayTeam: Team, val dateTime: LocalDateTime, val duration: Duration)
+data class Fixture(val id: FixtureId, val homeTeam: Team, val awayTeam: Team, val dateTime: LocalDateTime, val duration: Duration, val playingAreaName: String)
 
 data class League(
     val id: LeagueId,

@@ -6,6 +6,7 @@ import com.mduffin95.spawtzcalendar.model.TeamCalendar
 import net.fortuna.ical4j.model.Calendar
 import net.fortuna.ical4j.model.TimeZoneRegistryFactory
 import net.fortuna.ical4j.model.component.VEvent
+import net.fortuna.ical4j.model.property.Description
 import net.fortuna.ical4j.model.property.DtEnd
 import net.fortuna.ical4j.model.property.DtStamp
 import net.fortuna.ical4j.model.property.DtStart
@@ -38,12 +39,14 @@ private fun fromFixture(fixture: Fixture, createdInstant: Instant, uidGenerator:
     val end = start.plus(fixture.duration)
 
     val eventName = "${fixture.homeTeam.name} vs ${fixture.awayTeam.name}"
+    val description = fixture.playingAreaName
 
     var meeting: VEvent = VEvent(false)
     meeting = meeting.add(DtStamp(createdInstant))
     meeting = meeting.add(DtStart(start));
     meeting = meeting.add(DtEnd(end));
     meeting = meeting.add(Summary(eventName));
+    meeting = meeting.add(Description(description));
     meeting = meeting
         .withProperty(timeZone.vTimeZone.timeZoneId)
         .withProperty(uidGenerator.invoke())
