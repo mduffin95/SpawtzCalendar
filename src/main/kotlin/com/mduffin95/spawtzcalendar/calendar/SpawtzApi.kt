@@ -12,6 +12,9 @@ fun getLeague(leagueId: LeagueId, seasonId: SeasonId): League {
     return XmlParser().parse(input)
 }
 
+// TODO: Retrieve standings using the following format
+// https://trytagrugby.spawtz.com/External/Fixtures/Feed.aspx?Type=Standings&SportId=0&VenueId=0&LeagueId=2156&SeasonId=96&DivisionId=8319
+
 fun getLeagues(): String {
     val client = JavaHttpClient()
 
